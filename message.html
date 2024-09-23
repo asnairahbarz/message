@@ -17,17 +17,35 @@
             font-size: 24px;
             text-align: center;
         }
+        #acceptBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
     <div id="message"></div>
+    <button id="acceptBtn">Accept</button>
 
     <script>
         const messageDiv = document.getElementById('message');
+        const acceptBtn = document.getElementById('acceptBtn');
+
         const repeatMessage = () => {
             messageDiv.innerHTML += "I miss you guys! Reunion when? HAAHAH <br>";
         };
+
+        // Prevent exiting the page
+        window.onbeforeunload = function() {
+            return "Are you sure you want to leave? You must accept first.";
+        };
+
+        acceptBtn.addEventListener('click', () => {
+            window.onbeforeunload = null; // Remove the unload warning
+            alert("Accepted! You can now leave the page.");
+        });
 
         // Repeat the message every second
         setInterval(repeatMessage, 1000);
