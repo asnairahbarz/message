@@ -61,18 +61,18 @@
         #warningModal {
             background-color: rgba(255, 0, 0, 0.9);
             border: 2px solid red;
-            animation: shake 0.5s infinite; /* Shake animation */
+            animation: shake 0.5s infinite;
             text-align: center;
-            box-shadow: 0 0 20px red; /* Glowing effect */
+            box-shadow: 0 0 20px red;
         }
         #warningModal div {
-            font-size: 30px; /* Increased font size for emphasis */
+            font-size: 30px;
             font-weight: bold;
-            margin: 10px 0; /* Add some space between the lines */
+            margin: 10px 0;
         }
         #loading {
-            font-size: 20px; /* Smaller size for loading text */
-            color: yellow; /* Distinct color for loading */
+            font-size: 20px;
+            color: yellow;
         }
         @keyframes shake {
             0% { transform: translate(1px, 0); }
@@ -86,26 +86,26 @@
 <body>
 
     <div id="overlay"></div>
-    <div class="modal" id="initialModal">
+    <div class="modal" id="initialModal" aria-live="assertive">
         <div>Have a great day, Jiciel!</div>
         <button id="closeInitialBtn">Close</button>
     </div>
-    <div class="modal" id="confirmCloseModal">
+    <div class="modal" id="confirmCloseModal" aria-live="assertive">
         <div>Are you sure you want to close the window?</div>
         <button id="yesCloseBtn">Yes</button>
         <button id="noCloseBtn">No</button>
     </div>
-    <div class="modal" id="readyModal">
+    <div class="modal" id="readyModal" aria-live="assertive">
         <div>Are you ready for what will happen?</div>
         <button id="readyYesBtn">Yes</button>
         <button id="readyNoBtn">No</button>
     </div>
-    <div class="modal" id="warningModal">
+    <div class="modal" id="warningModal" aria-live="assertive">
         <div>⚠️ You are being hacked! ⚠️</div>
         <div id="loading">Loading...</div>
     </div>
 
-    <audio id="alarmSound" src="https://youtu.be/bgl6re32FO0" preload="auto"></audio> <!-- Replace with your alarm sound URL -->
+    <audio id="alarmSound" src="https://drive.google.com/file/d/1EBFcFRSQoEid3NRTGwjjVj7Ekkzg7fZt/view?usp=sharing/alarm.mp3" preload="auto"></audio> <!-- Replace with your alarm sound URL -->
 
     <script>
         const initialModal = document.getElementById('initialModal');
