@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message</title>
+    <title>Message Dialog</title>
     <style>
         body {
             display: flex;
@@ -11,56 +11,156 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            background-image: url(https://png.pngtree.com/thumb_back/fh260/background/20231020/pngtree-textured-paper-watercolor-floral-background-a-romantic-display-with-empty-space-image_13655270.png);
+            background-image: url('https://example.com/your-background.jpg'); /* Replace with your image URL */
             background-size: cover;
             background-position: center;
-            color: Red;
+            color: white;
+            font-family: Arial, sans-serif;
         }
-        #message {
-            font-size: 24px;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ccc;
+            padding: 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
-            backdrop-filter: blur(5px);
+            color: white;
         }
-        #acceptBtn {
+        .modal.active {
+            display: block;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 500;
+        }
+        button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
+            cursor: pointer;
+            border: 1px solid red;
+            background-color: black;
+            color: red;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        button:hover {
+            background-color: red;
+            color: black;
+        }
+        #warningModal {
+            background-color: rgba(255, 0, 0, 0.9);
+            border: 2px solid red;
+            animation: shake 0.5s infinite; /* Shake animation */
+            text-align: center;
+            box-shadow: 0 0 20px red; /* Glowing effect */
+        }
+        #warningModal div {
+            font-size: 30px; /* Increased font size for emphasis */
+            font-weight: bold;
+            margin: 10px 0; /* Add some space between the lines */
+        }
+        #loading {
+            font-size: 20px; /* Smaller size for loading text */
+            color: yellow; /* Distinct color for loading */
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 0); }
+            25% { transform: translate(-1px, 0); }
+            50% { transform: translate(1px, 0); }
+            75% { transform: translate(-1px, 0); }
+            100% { transform: translate(1px, 0); }
         }
     </style>
 </head>
 <body>
 
-    <div id="message"></div>
-    <button id="acceptBtn">Accept</button>
+    <div id="overlay"></div>
+    <div class="modal" id="initialModal">
+        <div>Have a great day, Jiciel!</div>
+        <button id="closeInitialBtn">Close</button>
+    </div>
+    <div class="modal" id="confirmCloseModal">
+        <div>Are you sure you want to close the window?</div>
+        <button id="yesCloseBtn">Yes</button>
+        <button id="noCloseBtn">No</button>
+    </div>
+    <div class="modal" id="readyModal">
+        <div>Are you ready for what will happen?</div>
+        <button id="readyYesBtn">Yes</button>
+        <button id="readyNoBtn">No</button>
+    </div>
+    <div class="modal" id="warningModal">
+        <div>⚠️ You are being hacked! ⚠️</div>
+        <div id="loading">Loading...</div>
+    </div>
+
+    <audio id="alarmSound" src="https://youtu.be/bgl6re32FO0" preload="auto"></audio> <!-- Replace with your alarm sound URL -->
 
     <script>
-        const messageDiv = document.getElementById('message');
-        const acceptBtn = document.getElementById('acceptBtn');
+        const initialModal = document.getElementById('initialModal');
+        const confirmCloseModal = document.getElementById('confirmCloseModal');
+        const readyModal = document.getElementById('readyModal');
+        const warningModal = document.getElementById('warningModal');
+        const overlay = document.getElementById('overlay');
+        const closeInitialBtn = document.getElementById('closeInitialBtn');
+        const yesCloseBtn = document.getElementById('yesCloseBtn');
+        const noCloseBtn = document.getElementById('noCloseBtn');
+        const readyYesBtn = document.getElementById('readyYesBtn');
+        const readyNoBtn = document.getElementById('readyNoBtn');
+        const alarmSound = document.getElementById('alarmSound');
 
-        const repeatMessage = () => {
-            messageDiv.innerHTML += "I miss you guys! Reunion when? HAAHAH <br>";
-        };
+        // Show initial message modal
+        initialModal.classList.add('active');
+        overlay.style.display = 'block';
 
-        // Set unload warning
-        window.onbeforeunload = function() {
-            return "Are you sure you want to leave? You must accept first.";
-        };
-
-        acceptBtn.addEventListener('click', () => {
-            window.onbeforeunload = null; // Remove the unload warning
-            alert("Accepted! You can now leave the page.");
+        closeInitialBtn.addEventListener('click', () => {
+            initialModal.classList.remove('active');
+            confirmCloseModal.classList.add('active');
         });
 
-        // Prevent default close action
-        document.addEventListener('visibilitychange', function() {
-            if (document.visibilityState === 'hidden' && window.onbeforeunload) {
-                alert("You must accept before closing this window!");
-                window.location.reload(); // Reload the page
+        yesCloseBtn.addEventListener('click', () => {
+            confirmCloseModal.classList.remove('active');
+            readyModal.classList.add('active');
+        });
+
+        noCloseBtn.addEventListener('click', () => {
+            confirmCloseModal.classList.remove('active');
+            initialModal.classList.add('active');
+        });
+
+        readyYesBtn.addEventListener('click', () => {
+            readyModal.classList.remove('active');
+            warningModal.classList.add('active');
+
+            // Play alarming sound
+            alarmSound.play();
+
+            // Vibrate for 3 seconds if supported
+            if ("vibrate" in navigator) {
+                navigator.vibrate(3000);
             }
+
+            // Simulate loading and redirecting after 3 seconds
+            setTimeout(() => {
+                window.location.href = 'https://www.facebook.com';
+            }, 3000);
         });
 
-        // Repeat the message every second
-        setInterval(repeatMessage, 1000);
+        readyNoBtn.addEventListener('click', () => {
+            readyModal.classList.remove('active');
+            initialModal.classList.add('active');
+        });
     </script>
 
 </body>
